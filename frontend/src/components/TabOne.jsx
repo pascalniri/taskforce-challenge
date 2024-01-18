@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios"
+import { useState } from "react";
+import useExpenses from "./hooks/useExpenses";
+
 const TabOne = () => {
   const [modal, setModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [budgets, setBudgets] = useState('');
+
+  const { data,  handleDeleteExpense, loading } = useExpenses();
 
   const openModal = () => {
     setModal(true);
@@ -14,55 +14,18 @@ const TabOne = () => {
     setModal(false);
   };
 
-  const data = [
-    {
-      id: 1,
-      budgetTitle: "Food & Drinks",
-      budgetDesc: "Purchased food to be used in a period of one month",
-      budgetAmount: "4538",
-      budgetDate: "12-03-2024",
-    },
-    {
-      id: 2,
-      budgetTitle: "Water",
-      budgetDesc: "Bought water for the week",
-      budgetAmount: "4538",
-      budgetDate: "12-03-2024",
-    },
-    {
-      id: 3,
-      budgetTitle: "Transport fees",
-      budgetDesc: "Paid money of my transport fromand to home",
-      budgetAmount: "4538",
-      budgetDate: "12-03-2024",
-    },
-  ];
-
-  useEffect(() => {
-    const getTransactions = async() => {
-        setLoading(true);
-        setError(null)
-  
-        try {
-          const response = await axios.get("http://localhost:8000/budgets/")
-          setBudgets(response)
-          console.log("The transactions are", response)
-        } catch (error) {
-            console.log(error);
-            setError(error);
-        } finally{
-          setLoading(false)
-        }
-  
-       
-    };
-    getTransactions();
-  }, [])
-
-
-
   return (
     <div className="mt-8 w-full overflow-x-auto">
+      {loading && (
+        <tr>
+          <td colSpan={5} className="text-center py-4">
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5E3BE8]"></div>
+            </div>
+          </td>
+        </tr>
+      )}
+      {!loading && data.length > 0  &&
       <table className="w-full text-left bg-white rounded-lg shadow-md overflow-hidden">
         <thead className="bg-[#5E3BE8] text-white">
           <tr>
@@ -92,7 +55,7 @@ const TabOne = () => {
                 </button>
                 <button
                   className="text-[12px] font-semibold text-white bg-red-500 px-[25px] py-[10px] rounded-full hover:bg-red-600"
-                  onClick={() => handleDelete(item.id)}
+                  onClick={() => handleDeleteExpense(item.id)}
                 >
                   Delete
                 </button>
@@ -100,7 +63,14 @@ const TabOne = () => {
             </tr>
           ))}
         </tbody>
+      
       </table>
+      }
+      {!loading && data.length === 0 && (
+        <div className="flex justify-center items-center h-[200px]">
+          <p className="text-[20px]">No expenses found</p>
+        </div>
+      )}
       <div className="relative">
         {modal && (
           <div className="bg-black bg-opacity-70 flex justify-center items-center z-50 fixed h-full w-full inset-0">

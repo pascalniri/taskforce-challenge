@@ -4,12 +4,10 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axiosInstance from "../../plugins/axios";
-import { useNavigate } from "react-router-dom";
 
 
 export default function useSignin() {
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
         email: yup.string().email("Please enter a valid email").required("Email is required"),
@@ -34,7 +32,8 @@ export default function useSignin() {
                 console.log(res.data?.data);
                 localStorage.setItem("token", res.data.data.token);
                 toast.success("Logged in successfully");
-                navigate("/dashboard");
+                // navigate("/dashboard", { replace: true });
+                window.location.href = "/dashboard";
                 setIsLoading(false);
             })
             .catch((error) => {

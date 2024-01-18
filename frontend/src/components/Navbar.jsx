@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import useDashboard from "./hooks/useDashboard";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { walletInfo, logout } = useDashboard();
+
+  // current path name
+  // console.log(window.location.pathname);
+  const pathname = window.location.pathname;
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -26,6 +32,7 @@ const Navbar = () => {
       </div>
 
       {/* Links */}
+      {!walletInfo && (pathname == "/" || pathname == "/signin" || pathname == "/signup") ?
       <ul
         className={`lg:flex flex-col lg:flex-row gap-10 absolute lg:static top-[70px] left-0 w-full lg:w-auto bg-white lg:bg-transparent px-6 lg:px-0 py-4 lg:py-0 z-40 transition-transform duration-300 ${
           menuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -52,12 +59,29 @@ const Navbar = () => {
           </button>
         </li>
       </ul>
+      :
+      <>
+      {!walletInfo ? 
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#5E3BE8] border-t-transparent" />
+                :
+                <label className="font-bold"><span>{parseInt(walletInfo?.balance)?.toLocaleString()} </span>  <span className="text-[#5E3BE8]">{walletInfo?.currency} </span></label>
+              }
+      </>
+      }
 
       {/* Sign-in Button */}
       <div className="hidden lg:block">
-        <button className="bg-[#5E3BE8] px-[34px] py-[15px] rounded-full text-white text-[14px] font-semibold hover:bg-[#522ee4] duration shadow-lg shadow-[#5e3be87e] ">
+        {!walletInfo ? (
+          <a href="/signin">
+          <button className="bg-[#5E3BE8] px-[34px] py-[15px] rounded-full text-white text-[14px] font-semibold hover:bg-[#522ee4] duration shadow-lg shadow-[#5e3be87e] ">
           Sign in{" "}
+          </button>
+          </a>
+        ) : (
+          <button onClick={logout} className="bg-[#5E3BE8] cursor-pointer  px-[34px] py-[15px] rounded-full text-white text-[14px] font-semibold hover:bg-[#522ee4] duration shadow-lg shadow-[#5e3be87e] ">
+          Logout{" "}
         </button>
+        )}
       </div>
     </div>
   );

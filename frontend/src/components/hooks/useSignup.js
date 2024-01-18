@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axiosInstance from "../../plugins/axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 
 export default function useSignup() {
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
         name: yup.string().required("Full name is required"),
@@ -42,7 +42,8 @@ export default function useSignup() {
                 console.log(res.data?.data);
                 localStorage.setItem("token", res.data.data.token);
                 toast.success("Account created successfully");
-                navigate("/dashboard");
+                // navigate("/dashboard");
+                window.location.href = "/dashboard";
                 setIsLoading(false);
             })
             .catch((error) => {
