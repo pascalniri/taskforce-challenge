@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useSignup from "./hooks/useSignup";
+import { Toaster } from "react-hot-toast";
 
 const Signup = () => {
   const { errors, handleSubmit, onSubmit, register, formState: { touchedFields }, isLoading } = useSignup();
@@ -8,6 +9,7 @@ const Signup = () => {
 
   return (
     <div className="mx-auto max-w-7xl grid grid-cols-1 justify-items-center font-quicksand px-4 md:px-[30px] lg:px-0">
+      <Toaster />
       <div className="w-[100%] md:w-[70%] lg:w-[600px] h-full flex flex-col justify-center items-center px-[1rem] md:px-[5rem] py-[25px] bg-[#F5F3FE] rounded-lg">
         <a href="/" className="bg-white h-[120px] w-[120px] flex justify-center items-center rounded-full">
           <h1 className="font-bold text-[25px]">

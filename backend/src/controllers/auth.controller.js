@@ -93,3 +93,23 @@ export const login =  async (req, res) => {
     res.status(INTERNAL_SERVER_ERROR).send('An error occurred during login.')
   }
 };
+
+export const getUserProfile = async (req, res) => {
+  const userId = req.user._id;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(BAD_REQUEST).json({
+        status: 'failed',
+        message: 'User not found'
+      });
+    }
+    const userWithoutPassword = _.omit(user.toObject(), ['password']);
+    res.status(OK).json({
+      status: 'success',
+      data: userWithoutPassword
+    });
+  } catch (error) {
+    res.status(INTERNAL_SERVER_ERROR).send('An error occurred while fetching user profile.');
+  }
+}

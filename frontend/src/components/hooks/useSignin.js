@@ -7,22 +7,15 @@ import axiosInstance from "../../plugins/axios";
 import { useNavigate } from "react-router-dom";
 
 
-export default function useSignup() {
+export default function useSignin() {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
-        name: yup.string().required("Full name is required"),
         email: yup.string().email("Please enter a valid email").required("Email is required"),
         password: yup
             .string()
-            .min(6, "Password must be at least 6 characters")
-            .max(15, "Password must not exceed 15 characters")
-            .required("Password is required"),
-        confirmPassword: yup
-            .string()
-            .oneOf([yup.ref('password')], "Passwords must match")
-            .required("Please confirm your password"),
+            .required("Password is required")
     });
 
     const { 
@@ -31,22 +24,21 @@ export default function useSignup() {
         register 
     } = useForm({
         resolver: yupResolver(validationSchema),
-        mode: "onChange" // This will make validation run on change instead of just on submit
+        mode: "onChange" 
     });
 
     const onSubmit = (data) => {
         setIsLoading(true);
-        delete data.confirmPassword;
-        axiosInstance.post("/auth/register", data)
+        axiosInstance.post("/auth/login", data)
             .then((res) => {
                 console.log(res.data?.data);
                 localStorage.setItem("token", res.data.data.token);
-                toast.success("Account created successfully");
+                toast.success("Logged in successfully");
                 navigate("/dashboard");
                 setIsLoading(false);
             })
             .catch((error) => {
-                toast.error(error.response.data.message);
+                toast.error(error?.response?.data?.message || "Invalid email or password");
                 console.error(error);
                 setIsLoading(false);
             });
