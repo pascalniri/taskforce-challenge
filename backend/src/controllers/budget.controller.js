@@ -56,7 +56,7 @@ class BudgetController {
             if (wallet.totalBalance < req.body.budgetAmount) {
                 return res.status(400).json({
                     status: "failed",
-                    message: "Insufficient wallet balance for this budget"
+                    message: "Insufficient wallet balance for this budget, click on recharge to top up your wallet"
                 });
             }
 

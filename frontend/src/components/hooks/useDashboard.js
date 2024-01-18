@@ -11,6 +11,14 @@ export default function useDashboard(){
         email: ""
     });
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const pathname = window.location.pathname;
+        if (!token && pathname == "/dashboard") {
+            window.location.href = '/signin';
+        }
+    }, []);
+
     const [walletInfo, setWalletInfo] = useState(null);
 
     const handleFetchProfile = () => {

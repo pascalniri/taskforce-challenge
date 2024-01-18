@@ -43,9 +43,15 @@ const TabOne = () => {
               className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
             >
               <td className="py-4 px-6">{item.budgetTitle}</td>
-              <td className="py-4 px-6">{item.budgetDesc}</td>
-              <td className="py-4 px-6">{item.budgetAmount}</td>
-              <td className="py-4 px-6">{item.budgetDate}</td>
+              <td className="py-4 px-6">{item.budgetDescription}</td>
+              <td className="py-4 px-6">{parseInt(item.budgetAmount).toLocaleString()}</td>
+              <td className="py-4 px-6">
+                {new Date(item.budgetDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </td>
               <td className="py-4 px-6 flex flex-row items-center">
                 <button
                   className="text-[12px] font-semibold text-white bg-[#5E3BE8] px-[25px] py-[10px] rounded-full hover:bg-[#4d32c0] mr-2"

@@ -43,6 +43,7 @@ export default function useWallet() {
         try {
             const response = await axiosInstance.post("/budget", data);
             toast.success("Transaction added successfully");
+            window.location.reload(); 
             reset(); // Reset form after successful submission
             return response.data;
         } catch (error) {
