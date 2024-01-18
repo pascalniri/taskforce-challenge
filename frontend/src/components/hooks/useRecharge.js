@@ -36,6 +36,7 @@ export default function useRecharge() {
             const response = await axiosInstance.post("/wallet/deposit", data);
             toast.success("Account recharged successfully");
             reset();
+            window.location.reload();
             handleFetchWalletInfo();
             setModal(false);
             return response.data;
