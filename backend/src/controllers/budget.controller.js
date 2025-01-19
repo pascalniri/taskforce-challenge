@@ -96,12 +96,33 @@ class BudgetController {
                 return res.status(404).json({ message: 'Cannot find the transaction.' });
             }
 
-            if (req.body.budgetTitle != null) budget.budgetTitle = req.body.budgetTitle;
-            if (req.body.budgetDescription != null) budget.budgetDescription = req.body.budgetDescription;
-            if (req.body.budgetAmount != null) budget.budgetAmount = req.body.budgetAmount;
-            if (req.body.budgetDate != null) budget.budgetDate = req.body.budgetDate;
+            const updateFields = {
+                budgetTitle: req.body.budgetTitle,
+                budgetDescription: req.body.budgetDescription,
+                budgetAmount: req.body.budgetAmount,
+                budgetDate: req.body.budgetDate
+            };
+
+            Object.keys(updateFields).forEach(key => {
+                if (updateFields[key] != null) {
+                    budget[key] = updateFields[key];
+                }
+            });
 
             const updatedBudget = await budget.save();
+
+            // I want you to compute the difference between the old budget amount and the new budget amount and update the wallet balance accordingly
+            const wallet = await Wallet.findOne({ user: req.user._id });
+            if (!wallet) {
+                return res.status(404).json({
+                    status: "failed",
+                    message: "Wallet not found"
+                });
+            }
+
+            wallet.totalBalance += (req.body.budgetAmount - budget.budgetAmount);
+            await wallet.save();
+
             res.status(201).json(
                 {
                     status: "success",
@@ -129,6 +150,18 @@ class BudgetController {
                     }
                 );
             }
+            // Update wallet balance after budget deletion
+            const wallet = await Wallet.findOne({ user: req.user._id });
+            if (!wallet) {
+                return res.status(404).json({
+                    status: "failed",
+                    message: "Wallet not found"
+                });
+            }
+
+            wallet.totalBalance += budget.budgetAmount;
+            await wallet.save();
+            
             await budget.deleteOne();
             res.json({ message: 'Deleted transaction successfully' });
         } catch (error) {
