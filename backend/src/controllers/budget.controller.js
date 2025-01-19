@@ -111,7 +111,6 @@ class BudgetController {
 
             const updatedBudget = await budget.save();
 
-            // I want you to compute the difference between the old budget amount and the new budget amount and update the wallet balance accordingly
             const wallet = await Wallet.findOne({ user: req.user._id });
             if (!wallet) {
                 return res.status(404).json({
@@ -150,7 +149,6 @@ class BudgetController {
                     }
                 );
             }
-            // Update wallet balance after budget deletion
             const wallet = await Wallet.findOne({ user: req.user._id });
             if (!wallet) {
                 return res.status(404).json({
