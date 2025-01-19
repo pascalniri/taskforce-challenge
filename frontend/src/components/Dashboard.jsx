@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TabOne from './TabOne'; // Replace with your actual component paths
 import TabTwo from './TabTwo';
 import TabThree from './TabThree';
+import TabFour from './TabFour';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('tab1'); // State to track active tab
@@ -21,7 +22,7 @@ const Dashboard = () => {
             className={`px-4 py-2 ${activeTab === 'tab1' ? 'text-[#5E3BE8] font-bold border-b-2 border-[#5E3BE8]' : 'text-gray-500'}`}
             onClick={() => setActiveTab('tab1')}
           >
-            Your wallet
+            Your expenses
           </button>
           <button
             className={`px-4 py-2 ${activeTab === 'tab2' ? 'text-[#5E3BE8] font-bold border-b-2 border-[#5E3BE8]' : 'text-gray-500'}`}
@@ -35,6 +36,12 @@ const Dashboard = () => {
           >
             Analytics
           </button>
+          <button
+            className={`px-4 py-2 ${activeTab === 'tab4' ? 'text-[#5E3BE8] font-bold border-b-2 border-[#5E3BE8]' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('tab4')}
+          >
+            Recharge
+          </button>
         </div>
 
         {/* Tab Content */}
@@ -42,6 +49,7 @@ const Dashboard = () => {
           {activeTab === 'tab1' && <TabOne />}
           {activeTab === 'tab2' && <TabTwo />}
           {activeTab === 'tab3' && <TabThree />}
+          {activeTab === 'tab4' && <TabFour />}
         </div>
       </div>
     </div>
