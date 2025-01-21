@@ -12,7 +12,7 @@ const Home = () => {
         </Link>
       </div>
       <div>
-        <img src="/image1.svg" alt="" />
+        <img src="/walletHero.png" alt="" />
       </div>
     </div>
   )
